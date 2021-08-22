@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return  Center(
         child: Text(
           "SettingsScreen",
           style: TextStyle(
@@ -11,7 +10,6 @@ class SettingsScreen extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-      ),
-    );
+      );
   }
 }
