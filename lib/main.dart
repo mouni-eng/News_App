@@ -5,15 +5,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:news_app/screens/news_layout_screen.dart';
+import 'package:news_app/services/cash_helper.dart';
 import 'package:news_app/services/dio_helper.dart';
 import 'package:news_app/view_models/cubit/bloc_observer.dart';
 import 'package:news_app/view_models/cubit/cubit.dart';
 import 'package:news_app/view_models/cubit/states.dart';
 
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
+  await CashHelper.init();
   runApp(NewsApp());
 }
 
@@ -22,7 +25,7 @@ class NewsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NewsCubit()..getBusiness()..getScience()..getSports(),
+      create: (context) => NewsCubit()..getBusiness()..getScience()..getSports()..getThemeMode(),
       child: BlocConsumer<NewsCubit, NewsStates>(
         listener: (context, state) {},
         builder: (context, state) {

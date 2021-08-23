@@ -33,6 +33,8 @@ dependencies:
   dio: ^4.0.0
   conditional_builder: ^1.0.2
   hexcolor: ^2.0.5
+  shared_preferences: ^2.0.6
+  webview_flutter: ^2.0.12
 
 dev_dependencies:
   flutter_test:
