@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/screens/business_screen.dart';
 import 'package:news_app/screens/science_screen.dart';
 import 'package:news_app/screens/sports_screen.dart';
+import 'package:news_app/services/cash_helper.dart';
 import 'package:news_app/services/dio_helper.dart';
 import 'package:news_app/view_models/cubit/states.dart';
 import 'package:bloc/bloc.dart';
@@ -21,9 +22,17 @@ class NewsCubit extends Cubit<NewsStates> {
     emit(NewsBottomNavigationBarState());
   }
 
+  void getThemeMode() {
+    bool? fromSharedBool = CashHelper.getBool(key: "isDark");
+    if(fromSharedBool != null) {
+      isDark = fromSharedBool;
+      emit(NewsThemeModeState());
+    }
+  }
+
   void changeThemeMode() {
-    isDark = !isDark;
-    emit(NewsThemeModeState());
+      isDark = !isDark;
+      CashHelper.setBool(key: "isDark", value: isDark).then((value) => emit(NewsThemeModeState()));
   }
 
   List<Widget> screens = [
@@ -40,9 +49,9 @@ class NewsCubit extends Cubit<NewsStates> {
 
   List<dynamic> business = [];
   
-  void getBusiness() {
+  Future<void> getBusiness() async{
     emit(NewsLoadingState());
-    DioHelper.getData(url: "v2/top-headlines", query:
+    await DioHelper.getData(url: "v2/top-headlines", query:
     { "country" : "eg",
       "category" : "business",
       "apiKey" : "02a31838831b46369f46a42532baae3a",
@@ -59,9 +68,9 @@ class NewsCubit extends Cubit<NewsStates> {
 
   List<dynamic> science = [];
 
-  void getScience() {
+  Future<void> getScience() async{
     emit(NewsLoadingState());
-    DioHelper.getData(url: "v2/top-headlines", query:
+    await DioHelper.getData(url: "v2/top-headlines", query:
     { "country" : "eg",
       "category" : "science",
       "apiKey" : "02a31838831b46369f46a42532baae3a",
@@ -78,9 +87,9 @@ class NewsCubit extends Cubit<NewsStates> {
 
   List<dynamic> sports = [];
 
-  void getSports() {
+  Future<void> getSports() async{
     emit(NewsLoadingState());
-    DioHelper.getData(url: "v2/top-headlines", query:
+    await DioHelper.getData(url: "v2/top-headlines", query:
     { "country" : "eg",
       "category" : "sports",
       "apiKey" : "02a31838831b46369f46a42532baae3a",
@@ -92,6 +101,24 @@ class NewsCubit extends Cubit<NewsStates> {
     }).catchError((error) {
       print(error.toString());
       emit(NewsSportsErrorState());
+    });
+  }
+
+  List<dynamic> search = [];
+
+  void getSearch(String value) {
+    emit(NewsLoadingState());
+    DioHelper.getData(url: "v2/everything", query:
+    { "q" : value,
+      "apiKey" : "02a31838831b46369f46a42532baae3a",
+    }
+    ).then((value) {
+      search = value.data["articles"];
+      print(search[0].toString());
+      emit(NewsSearchSuccessState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(NewsSearchErrorState());
     });
   }
 

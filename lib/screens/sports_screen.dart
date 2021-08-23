@@ -9,8 +9,9 @@ class SportsScreen extends StatelessWidget {
     return  BlocConsumer<NewsCubit, NewsStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var list = NewsCubit.get(context).sports;
-        return buildArticleScreen(list, context);
+        var cubit = NewsCubit.get(context);
+        var list = cubit.sports;
+        return buildArticleScreen(list, context,);
       },
     );
   }

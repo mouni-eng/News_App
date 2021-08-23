@@ -8,4 +8,6 @@ class NewsScienceSuccessState extends NewsStates{}
 class NewsScienceErrorState extends NewsStates{}
 class NewsSportsSuccessState extends NewsStates{}
 class NewsSportsErrorState extends NewsStates{}
+class NewsSearchSuccessState extends NewsStates{}
+class NewsSearchErrorState extends NewsStates{}
 class NewsThemeModeState extends NewsStates{}
